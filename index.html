@@ -1,0 +1,22 @@
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<form id="myForm">
+  <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY"></div>
+  <button type="submit">Submit</button>
+</form>
+<script>
+  document.getElementById('myForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = document.querySelector('.cf-turnstile').turnstile.getResponse();
+    const response = await fetch('YOUR_WORKER_URL', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cfturnstiletoken: token })
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Verification successful!');
+    } else {
+      alert('Verification failed!');
+    }
+  });
+</script>
